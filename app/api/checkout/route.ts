@@ -4,13 +4,11 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Stripe from "stripe";
 import { calculateItemTotal } from "@/lib/pricing";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-12-15.clover",
-});
+import { getStripe } from "@/lib/stripe";
 
 export async function POST(request: NextRequest) {
   try {
+    const stripe = getStripe(); // Initialisation lazy
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
