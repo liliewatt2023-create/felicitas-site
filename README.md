@@ -282,6 +282,88 @@ Mettre ce secret dans `NEXTAUTH_SECRET`
 
 6. **Activer HTTPS** obligatoire
 
+## 🚀 Déploiement Vercel
+
+### Configuration Prisma pour Vercel
+
+**Problème résolu** : Vercel met en cache `node_modules`, ce qui peut rendre le client Prisma obsolète.
+
+**Solution appliquée** dans [package.json](package.json) :
+```json
+"scripts": {
+  "build": "prisma generate && next build",
+  "postinstall": "prisma generate"
+}
+```
+
+**Pourquoi les deux scripts ?**
+- `postinstall` : Exécuté après `npm install`, garantit que le client Prisma est généré même avec le cache Vercel
+- `build` avec `prisma generate` : Double sécurité + utile en développement local
+
+### Étapes de déploiement
+
+1. **Push sur GitHub/GitLab** :
+```bash
+git add .
+git commit -m "Production ready"
+git push origin main
+```
+
+2. **Importer dans Vercel** :
+   - Aller sur [vercel.com](https://vercel.com)
+   - Import Project > depuis votre repo Git
+   - Vercel détecte automatiquement Next.js
+
+3. **Configurer les variables d'environnement** :
+   - Dans Vercel Dashboard > Settings > Environment Variables
+   - Ajouter TOUTES les variables de `.env` sauf `DATABASE_URL` (SQLite)
+   - Pour la production, utiliser PostgreSQL (voir ci-dessous)
+
+4. **Déployer** :
+   - Vercel lance automatiquement le build
+   - Le script `postinstall` génère le client Prisma
+   - Le build Next.js s'exécute
+
+### Migration vers PostgreSQL (recommandé production)
+
+SQLite ne fonctionne pas sur Vercel (filesystem read-only). Utiliser PostgreSQL :
+
+1. **Créer une base PostgreSQL** :
+   - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+   - Ou [Supabase](https://supabase.com) (gratuit)
+   - Ou [Neon](https://neon.tech) (gratuit)
+
+2. **Mettre à jour `prisma/schema.prisma`** :
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
+
+3. **Ajouter `DATABASE_URL` dans Vercel** :
+```
+DATABASE_URL="postgresql://user:password@host:5432/database?schema=public"
+```
+
+4. **Générer et appliquer les migrations** :
+```bash
+npx prisma migrate deploy
+```
+
+### Bonnes pratiques Vercel + Prisma
+
+✅ **Fait** :
+- `prisma` dans `dependencies` (pas `devDependencies`)
+- `postinstall` avec `prisma generate`
+- `build` inclut `prisma generate`
+
+⚠️ **À faire en production** :
+- Utiliser PostgreSQL au lieu de SQLite
+- Configurer `NEXTAUTH_SECRET` sécurisé
+- Utiliser les clés Stripe de production
+- Configurer un SMTP fiable (SendGrid, Mailgun)
+
 ## 🐛 Dépannage
 
 ### Erreur Prisma "Client not generated"
