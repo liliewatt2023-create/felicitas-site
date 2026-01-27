@@ -38,7 +38,6 @@ next-env.d.ts
 # prisma
 /prisma/dev.db
 /prisma/dev.db-journal
-/prisma/migrations
 IMAGE/*.mp4
 public/videos/*_original.mp4
 
