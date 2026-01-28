@@ -102,7 +102,7 @@ SENDGRID_API_KEY=SG.votre_cle_sendgrid_ici
 
 # Email Configuration
 EMAIL_FROM=info@boutique-felicita.fr
-EMAIL_FROM_NAME=Charcuterie Felicita
+EMAIL_FROM_NAME=Boutique Felicita
 ADMIN_EMAIL=contact@boutique-felicita.fr
 
 # Anciennes variables (peuvent rester pour compatibilité)

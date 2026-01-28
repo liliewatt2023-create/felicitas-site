@@ -35,7 +35,7 @@ export async function sendWelcomeEmail({
   const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`;
 
   const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
-  const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
+  const fromName = process.env.EMAIL_FROM_NAME || "Boutique Felicita";
 
   console.log(`📤 Tentative d'envoi email à ${to} depuis ${fromName} <${fromEmail}>`);
 
@@ -46,7 +46,7 @@ export async function sendWelcomeEmail({
         name: fromName
       },
       to,
-      subject: "🎉 Bienvenue chez Charcuterie Felicita - Vos identifiants",
+      subject: "🎉 Bienvenue chez Boutique Felicita - Vos identifiants",
       html: `
         <!DOCTYPE html>
         <html>
@@ -110,7 +110,7 @@ export async function sendWelcomeEmail({
         <body>
           <div class="container">
             <div class="header">
-              <h1>🥓 Bienvenue chez Charcuterie Felicita</h1>
+              <h1>🥓 Bienvenue chez Boutique Felicita</h1>
             </div>
 
             <div class="content">
@@ -151,11 +151,11 @@ export async function sendWelcomeEmail({
 
               <p>À bientôt sur notre boutique !</p>
 
-              <p><em>L'équipe Charcuterie Felicita</em></p>
+              <p><em>L'équipe Boutique Felicita</em></p>
             </div>
 
             <div class="footer">
-              <p>Charcuterie Felicita - Produits corses authentiques</p>
+              <p>Boutique Felicita - Produits corses authentiques</p>
               <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
             </div>
           </div>
@@ -188,7 +188,7 @@ export async function sendReviewModerationEmail(
   const rejectUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=reject`;
 
   const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
-  const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
+  const fromName = process.env.EMAIL_FROM_NAME || "Boutique Felicita";
   const adminEmail = process.env.ADMIN_EMAIL || "contact@boutique-felicita.fr";
 
   console.log(`📤 Tentative d'envoi email modération à ${adminEmail} depuis ${fromName} <${fromEmail}>`);
