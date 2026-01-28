@@ -723,7 +723,7 @@ export default function HomePage() {
               <p className="text-lg mb-4">Suivez-nous sur les réseaux sociaux</p>
               <div className="flex items-center justify-center gap-6">
                 <a
-                  href="https://instagram.com/boutiquefelicita"
+                  href="https://www.instagram.com/felicita.corse?igsh=aXh4c3lwcDVodWg2"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ivory text-primary w-12 h-12 rounded-full flex items-center justify-center hover:bg-accent hover:text-ivory transition-all transform hover:scale-110"
@@ -734,7 +734,7 @@ export default function HomePage() {
                   </svg>
                 </a>
                 <a
-                  href="https://facebook.com/boutiquefelicita"
+                  href="https://www.facebook.com/share/1CRq49qqyE/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ivory text-primary w-12 h-12 rounded-full flex items-center justify-center hover:bg-accent hover:text-ivory transition-all transform hover:scale-110"

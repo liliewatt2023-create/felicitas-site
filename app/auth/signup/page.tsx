@@ -16,6 +16,7 @@ function SignUpForm() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState(roleParam || "particulier");
   const [committeeCode, setCommitteeCode] = useState("");
+  const [rgpdConsent, setRgpdConsent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -47,6 +48,12 @@ function SignUpForm() {
     // Validation
     if (!email || !password || !firstName || !lastName || !phone) {
       setError("Tous les champs sont requis (y compris le téléphone)");
+      setLoading(false);
+      return;
+    }
+
+    if (!rgpdConsent) {
+      setError("Vous devez accepter la politique de confidentialité pour créer un compte");
       setLoading(false);
       return;
     }
@@ -306,6 +313,29 @@ function SignUpForm() {
               </p>
             </div>
           )}
+
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <label className="flex items-start cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rgpdConsent}
+                onChange={(e) => setRgpdConsent(e.target.checked)}
+                className="mt-1 mr-3 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                required
+              />
+              <span className="text-sm text-gray-700">
+                J'accepte la{" "}
+                <a
+                  href="/legal/politique-confidentialite"
+                  target="_blank"
+                  className="text-primary hover:text-accent font-semibold underline"
+                >
+                  politique de confidentialité
+                </a>{" "}
+                et consent à être recontacté par Charcuterie Felicita concernant mes achats et les offres promotionnelles. *
+              </span>
+            </label>
+          </div>
 
           <button
             type="submit"
