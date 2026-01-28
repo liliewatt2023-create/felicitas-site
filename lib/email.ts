@@ -56,17 +56,8 @@ export async function sendWelcomeEmail({
     `;
   }
 
-  // PROTECTION ANTI-LOCALHOST: Toujours utiliser l'URL de production
-  // Même si NEXTAUTH_URL existe, on vérifie qu'elle ne contient pas localhost
-  const envUrl = process.env.NEXTAUTH_URL || "";
-  const productionUrl = "https://www.boutique-felicita.fr";
-
-  // Si l'URL contient localhost ou 127.0.0.1, forcer l'URL de production
-  const baseUrl = envUrl.includes("localhost") || envUrl.includes("127.0.0.1") || !envUrl
-    ? productionUrl
-    : envUrl;
-
-  const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${verificationToken}`;
+  // URL DE PRODUCTION HARDCODÉE - Aucune variable d'environnement
+  const verificationUrl = `https://www.boutique-felicita.fr/api/auth/verify-email?token=${verificationToken}`;
 
   console.log(`🔗 Lien de vérification généré: ${verificationUrl}`);
 
@@ -233,15 +224,9 @@ export async function sendReviewModerationEmail(
   comment: string,
   token: string
 ) {
-  // PROTECTION ANTI-LOCALHOST: Toujours utiliser l'URL de production
-  const envUrl = process.env.NEXTAUTH_URL || "";
-  const productionUrl = "https://www.boutique-felicita.fr";
-  const baseUrl = envUrl.includes("localhost") || envUrl.includes("127.0.0.1") || !envUrl
-    ? productionUrl
-    : envUrl;
-
-  const acceptUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=approve`;
-  const rejectUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=reject`;
+  // URL DE PRODUCTION HARDCODÉE - Aucune variable d'environnement
+  const acceptUrl = `https://www.boutique-felicita.fr/api/reviews/moderate?token=${token}&action=approve`;
+  const rejectUrl = `https://www.boutique-felicita.fr/api/reviews/moderate?token=${token}&action=reject`;
 
   const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
   const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
