@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { randomUUID } from 'crypto';
 
 const reviews = [
   {
@@ -112,6 +113,7 @@ export async function POST() {
           rating: reviewData.rating,
           comment: reviewData.comment,
           status: 'APPROVED', // Directement approuvé pour affichage
+          token: randomUUID(), // Token unique requis
           productId: randomProduct.id,
           userId: user.id,
           createdAt: reviewData.date,

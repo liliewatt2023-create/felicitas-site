@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -110,6 +111,7 @@ async function main() {
         rating: reviewData.rating,
         comment: reviewData.comment,
         status: 'APPROVED', // Directement approuvé pour affichage
+        token: randomUUID(), // Token unique requis
         productId: randomProduct.id,
         userId: user.id,
         createdAt: reviewData.date,
