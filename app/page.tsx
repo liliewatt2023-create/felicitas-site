@@ -212,7 +212,7 @@ export default function HomePage() {
           <div className="flex justify-center mb-8">
             <Image
               src="/images/logo.png"
-              alt="Boutique Felicita"
+              alt="Charcuterie Felicita"
               width={200}
               height={200}
               className="rounded-2xl shadow-2xl"
@@ -220,7 +220,7 @@ export default function HomePage() {
             />
           </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Boutique Felicita
+            Charcuterie Felicita
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
             Découvrez notre sélection de charcuterie artisanale corse et
@@ -391,7 +391,7 @@ export default function HomePage() {
       <section className="bg-wood py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">
-            Pourquoi choisir Boutique Felicita ?
+            Pourquoi choisir Charcuterie Felicita ?
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
@@ -450,7 +450,7 @@ export default function HomePage() {
                 Notre engagement qualité
               </h2>
               <p className="text-lg text-charcoal leading-relaxed max-w-3xl mx-auto">
-                Chez Boutique Felicita, chaque produit est sélectionné avec exigence.
+                Chez Charcuterie Felicita, chaque produit est sélectionné avec exigence.
                 Nous privilégions des méthodes artisanales, des matières premières de qualité
                 et des temps d'affinage respectés, pour garantir un goût authentique et constant.
               </p>
@@ -671,7 +671,7 @@ export default function HomePage() {
               <div className="bg-ivory p-8 rounded-xl shadow-lg text-center">
                 <div className="text-5xl mb-4">⭐⭐⭐⭐⭐</div>
                 <p className="text-charcoal mb-4">
-                  Les avis publiés sur Boutique Felicita sont soumis à vérification
+                  Les avis publiés sur Charcuterie Felicita sont soumis à vérification
                   avant mise en ligne afin de garantir leur authenticité.
                 </p>
                 <p className="text-sm text-gray-600 italic">
