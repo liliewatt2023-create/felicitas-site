@@ -65,12 +65,11 @@ const reviews = [
   }
 ];
 
-export async function POST() {
-  try {
-    console.log('🌱 Début du seeding des avis...');
+async function seedReviews() {
+  console.log('🌱 Début du seeding des avis...');
 
-    // Récupérer tous les produits
-    const products = await prisma.product.findMany();
+  // Récupérer tous les produits
+  const products = await prisma.product.findMany();
 
     if (products.length === 0) {
       return NextResponse.json(
@@ -130,12 +129,30 @@ export async function POST() {
       where: { status: 'APPROVED' }
     });
 
-    return NextResponse.json({
+    return {
       success: true,
       message: `${created} avis créés avec succès`,
       totalApprovedReviews: totalReviews
-    });
+    };
+}
 
+export async function POST() {
+  try {
+    const result = await seedReviews();
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error('❌ Erreur lors du seeding:', error);
+    return NextResponse.json(
+      { error: 'Erreur lors du seeding des avis', details: error },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    const result = await seedReviews();
+    return NextResponse.json(result);
   } catch (error) {
     console.error('❌ Erreur lors du seeding:', error);
     return NextResponse.json(
