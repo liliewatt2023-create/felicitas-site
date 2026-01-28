@@ -69,7 +69,7 @@ export async function GET() {
     for (const product of products) {
       const result = await prisma.product.upsert({
         where: { slug: product.slug },
-        update: {},
+        update: product, // Met à jour tous les champs (y compris l'image) si le produit existe
         create: product,
       });
       created.push(result.name);

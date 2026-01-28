@@ -68,7 +68,7 @@ async function main() {
   for (const product of products) {
     await prisma.product.upsert({
       where: { slug: product.slug },
-      update: {},
+      update: product, // Met à jour tous les champs (y compris l'image) si le produit existe
       create: product,
     });
   }
