@@ -38,10 +38,6 @@ export default function ReviewList({ reviews }: ReviewListProps) {
           </div>
 
           <p className="text-gray-700 mb-2">{review.comment}</p>
-
-          <div className="text-xs text-gray-500">
-            Par {review.user.email.split("@")[0]}***
-          </div>
         </div>
       ))}
     </div>
