@@ -56,8 +56,15 @@ export async function sendWelcomeEmail({
     `;
   }
 
-  // Utiliser NEXTAUTH_URL ou fallback sur l'URL de production
-  const baseUrl = process.env.NEXTAUTH_URL || "https://www.boutique-felicita.fr";
+  // PROTECTION ANTI-LOCALHOST: Toujours utiliser l'URL de production
+  // Même si NEXTAUTH_URL existe, on vérifie qu'elle ne contient pas localhost
+  const envUrl = process.env.NEXTAUTH_URL || "";
+  const productionUrl = "https://www.boutique-felicita.fr";
+
+  // Si l'URL contient localhost ou 127.0.0.1, forcer l'URL de production
+  const baseUrl = envUrl.includes("localhost") || envUrl.includes("127.0.0.1") || !envUrl
+    ? productionUrl
+    : envUrl;
 
   const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${verificationToken}`;
 
@@ -226,7 +233,13 @@ export async function sendReviewModerationEmail(
   comment: string,
   token: string
 ) {
-  const baseUrl = process.env.NEXTAUTH_URL || "https://www.boutique-felicita.fr";
+  // PROTECTION ANTI-LOCALHOST: Toujours utiliser l'URL de production
+  const envUrl = process.env.NEXTAUTH_URL || "";
+  const productionUrl = "https://www.boutique-felicita.fr";
+  const baseUrl = envUrl.includes("localhost") || envUrl.includes("127.0.0.1") || !envUrl
+    ? productionUrl
+    : envUrl;
+
   const acceptUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=approve`;
   const rejectUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=reject`;
 
