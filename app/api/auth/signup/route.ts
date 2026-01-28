@@ -46,14 +46,14 @@ export async function POST(request: NextRequest) {
     // Générer un token de vérification unique
     const verificationToken = crypto.randomBytes(32).toString("hex");
 
-    // Créer l'utilisateur
+    // Créer l'utilisateur - TEMPORAIRE: emailVerified à true car emails ne fonctionnent pas encore
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         role,
         committeeApproved,
-        emailVerified: false,
+        emailVerified: true, // TEMPORAIRE: true car Resend pas encore configuré
         verificationToken,
       },
     });
@@ -68,9 +68,10 @@ export async function POST(request: NextRequest) {
         role,
         verificationToken,
       });
+      console.log(`📧 Email de bienvenue envoyé à ${email}`);
     } catch (emailError) {
-      console.error("Erreur lors de l'envoi de l'email:", emailError);
-      // On continue même si l'email échoue
+      console.error("⚠️ Erreur lors de l'envoi de l'email:", emailError);
+      // On continue même si l'email échoue - compte déjà créé avec emailVerified=true
     }
 
     return NextResponse.json(
