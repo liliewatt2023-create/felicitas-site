@@ -5,70 +5,56 @@ export async function GET() {
   try {
     console.log("🌱 Seeding database...");
 
-    // Création des produits de charcuterie
+    // Création des produits - VOS VRAIS PRODUITS de la base locale
     const products = [
       {
-        name: "Cuchutelu",
-        slug: "cuchutelu",
-        description: "Noix de jambon d'exception",
-        details: "Affinage 100 jours. Une pièce artisanale d'une finesse remarquable.",
-        category: "CHARCUTERIE",
-      },
-      {
-        name: "Unzo",
-        slug: "unzo",
-        description: "Jambon corse authentique",
-        details:
-          "Affinage 12 mois, fumage bois de châtaigne 15 jours, conservation 6 mois. Un produit d'exception aux arômes incomparables.",
-        category: "CHARCUTERIE",
-      },
-      {
-        name: "Copa",
-        slug: "copa",
-        description: "Coppa corse traditionnelle",
-        details:
-          "Affinage 12 mois, fumage bois de châtaignier 15 jours, conservation 6 mois. Délicatement persillée et parfumée.",
-        category: "CHARCUTERIE",
-      },
-      {
-        name: "Figatelli IGP",
-        slug: "figatelli-igp",
-        description: "Saucisse de foie corse IGP",
-        details:
-          "Label IGP, fabriqué selon la tradition corse. Idéal grillé ou poêlé.",
-        category: "CHARCUTERIE",
-      },
-      {
-        name: "Saucisson Sanglier & Cochon",
-        slug: "saucisson-sanglier-cochon",
-        description: "Mélange unique de sanglier et cochon corse",
-        details:
-          "Un goût puissant et sauvage, mélange parfait entre tradition et caractère.",
-        category: "CHARCUTERIE",
-      },
-      {
-        name: "Saucisson Nature",
-        slug: "saucisson-nature",
-        description: "Saucisson sec artisanal",
-        details:
-          "Saucisson nature traditionnel, affiné lentement pour révéler tous ses arômes.",
-        category: "CHARCUTERIE",
-      },
-      {
-        name: "Fromage Artisanal Corse",
-        slug: "fromage-artisanal",
-        description: "Fromage au lait de brebis",
-        details:
-          "Fromage fermier au lait cru de brebis corse. Fabriqué selon les méthodes ancestrales.",
+        name: "Tomme de Chèvre Corse",
+        slug: "tomme-chevre",
+        description: "Tomme de chèvre corse au lait entier, affinage de 10 mois. Texture onctueuse et saveur corsée authentique.",
+        details: "TOME CORSE CHÈVRE LAIT ENTIER - AFFINAGE 10 MOIS - CONSERVATION 3 MOIS. Produit artisanal élaboré selon la tradition fromagère corse.",
         category: "FROMAGE",
       },
       {
-        name: "Brocciu Fermier",
-        slug: "brocciu-fermier",
-        description: "Fromage frais corse AOP",
-        details:
-          "Le célèbre Brocciu corse AOP, fromage frais onctueux et délicat. Parfait en cuisine ou nature.",
+        name: "Tome de Brebis Corse",
+        slug: "tome-brebis",
+        description: "Tome de brebis corse au lait entier, affinée 8 mois. Goût intense et authentique du terroir corse.",
+        details: "TOME CORSE BREBIS - AFFINAGE 8 MOIS - LAIT ENTIER - CONSERVATION 3 MOIS. Fromage de caractère élaboré dans le respect des traditions.",
         category: "FROMAGE",
+      },
+      {
+        name: "Saucisson Sanglier & Cochon Noir",
+        slug: "saucisson-sanglier",
+        description: "Saucisson corse 20% sanglier et 80% cochon noir, affinage 12 mois. Fumé au bois de châtaignier pendant 15 jours.",
+        details: "SAUCISSON CORSE SANGLIER 20% / COCHON NOIR 80% - AFFINAGE 12 MOIS - FUMAGE BOIS DE CHÂTAIGNIER 15 JOURS - CONSERVATION 6 MOIS. Produit d'exception au goût unique.",
+        category: "CHARCUTERIE",
+      },
+      {
+        name: "Copa Corse",
+        slug: "copa-corse",
+        description: "Copa corse élaborée à partir d'échines, gorge et joues. Affinage 12 mois et fumage au bois de châtaignier.",
+        details: "COPA CORSE - ÉCHINES, GORGE ET JOUES - AFFINAGE 12 MOIS - FUMAGE BOIS DE CHÂTAIGNIER 15 JOURS - CONSERVATION 6 MOIS. Charcuterie fine au goût délicat et raffiné.",
+        category: "CHARCUTERIE",
+      },
+      {
+        name: "Lonzu Corse",
+        slug: "lonzu-corse",
+        description: "Lonzu corse issu du contrefilet, la partie la plus noble avec seulement 7% de gras. Affinage 12 mois et fumage au bois de châtaignier.",
+        details: "LONZU CORSE - CONTREFILET PARTIE LA PLUS NOBLE - 7% DE GRAS - AFFINAGE 12 MOIS - FUMAGE AU BOIS DE CHÂTAIGNIER CORSE 15 JOURS - CONSERVATION 6 MOIS. Produit d'excellence à la texture fondante.",
+        category: "CHARCUTERIE",
+      },
+      {
+        name: "Cusciuttellu",
+        slug: "cusciuttellu",
+        description: "Noix de jambon affinée 2 ans, ouverte à cœur et garnie de poudre de noix et châtaigne. Roulée dans le poivre puis fumée au bois de châtaignier.",
+        details: "CUSCIUTTELLU - NOIX DE JAMBON - AFFINAGE 2 ANS TOTAL - Garni de poudre de noix et châtaigne après 1 an, puis roulé dans le poivre et affiné 1 an supplémentaire - FUMAGE BOIS DE CHÂTAIGNIER CORSE 15 JOURS - CONSERVATION 9 MOIS. Produit artisanal unique et raffiné.",
+        category: "CHARCUTERIE",
+      },
+      {
+        name: "Figatelli Corse",
+        slug: "figatelli",
+        description: "Saucisse de foie, sang, figues et épices corses en boyaux naturels. Précuite à 190°C dans un four à bois pendant 60 minutes.",
+        details: "FIGATELLI CORSE - Saucisse de foie, sang, figues et épices corses - Boyaux naturels - Précuite à 190°C au four à bois 60 minutes - Peut se manger cuite à cœur ou crue - AFFINAGE 6 MOIS - CONSERVATION 3 MOIS. Spécialité corse traditionnelle aux saveurs uniques.",
+        category: "CHARCUTERIE",
       },
     ];
 
