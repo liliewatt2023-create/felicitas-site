@@ -32,7 +32,14 @@ export async function sendWelcomeEmail({
       ? "Comité d'Entreprise"
       : "Restaurateur";
 
-  const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`;
+  // Utiliser NEXTAUTH_URL ou fallback sur l'URL de production
+  const baseUrl = process.env.NEXTAUTH_URL ||
+                  process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` :
+                  "https://www.boutique-felicita.fr";
+
+  const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${verificationToken}`;
+
+  console.log(`🔗 Lien de vérification généré: ${verificationUrl}`);
 
   const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
   const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
@@ -200,7 +207,7 @@ export async function sendReviewModerationEmail(
   comment: string,
   token: string
 ) {
-  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXTAUTH_URL || "https://www.boutique-felicita.fr";
   const acceptUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=approve`;
   const rejectUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=reject`;
 
