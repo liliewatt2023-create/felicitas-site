@@ -26,12 +26,12 @@ function VideoSection() {
                 Découvrez notre savoir-faire
               </h2>
             </div>
-            <div className="relative aspect-video bg-charcoal rounded-2xl overflow-hidden group cursor-pointer">
+            <div className="relative aspect-video bg-charcoal rounded-3xl overflow-hidden group cursor-pointer m-4">
               <video
                 ref={videoRef}
                 controls
                 playsInline
-                className="w-full h-full object-cover rounded-2xl"
+                className="w-full h-full object-cover rounded-3xl"
                 preload="auto"
                 poster="/images/affinage.jpg"
                 onPlay={() => setIsPlaying(true)}
@@ -44,7 +44,7 @@ function VideoSection() {
               {/* Play Button Overlay - only show when not playing */}
               {!isPlaying && (
                 <div
-                  className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-all cursor-pointer"
+                  className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-all cursor-pointer rounded-3xl"
                   onClick={handlePlayClick}
                 >
                   <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform">
@@ -131,10 +131,17 @@ function FAQSection() {
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-charcoal">
-              Une autre question ? Contactez-nous au{" "}
-              <a href="tel:0604110550" className="text-accent font-bold hover:underline">
-                06 04 11 05 50
+            <p className="text-charcoal mb-2">
+              Une autre question ? Contactez-nous :
+            </p>
+            <p className="mb-2">
+              <a href="tel:0604110550" className="text-accent font-bold hover:underline text-lg">
+                📞 06 04 11 05 50
+              </a>
+            </p>
+            <p>
+              <a href="mailto:contact@boutique-felicita.fr" className="text-accent font-bold hover:underline">
+                ✉️ contact@boutique-felicita.fr
               </a>
             </p>
           </div>
@@ -148,6 +155,13 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const scrollToSignup = () => {
+    const signupSection = document.getElementById('signup-section');
+    if (signupSection) {
+      signupSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -198,7 +212,7 @@ export default function HomePage() {
           <div className="flex justify-center mb-8">
             <Image
               src="/images/logo.png"
-              alt="Charcuterie Felicita"
+              alt="Boutique Felicita"
               width={200}
               height={200}
               className="rounded-2xl shadow-2xl"
@@ -206,7 +220,7 @@ export default function HomePage() {
             />
           </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Charcuterie Felicita
+            Boutique Felicita
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
             Découvrez notre sélection de charcuterie artisanale corse et
@@ -273,7 +287,7 @@ export default function HomePage() {
                         {product.description}
                       </p>
 
-                      <div className="mt-4">
+                      <div className="flex items-center justify-between mt-4">
                         <span
                           className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
                             product.category === "CHARCUTERIE"
@@ -285,6 +299,13 @@ export default function HomePage() {
                             ? "Charcuterie"
                             : "Fromage"}
                         </span>
+
+                        <button
+                          onClick={scrollToSignup}
+                          className="bg-primary text-ivory px-4 py-2 rounded-lg text-sm font-semibold hover:bg-accent transition-colors"
+                        >
+                          En savoir plus →
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -310,7 +331,7 @@ export default function HomePage() {
       </section>
 
       {/* Vous êtes Section */}
-      <section className="py-16">
+      <section id="signup-section" className="py-16 scroll-mt-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-primary">
             Vous êtes...
@@ -370,7 +391,7 @@ export default function HomePage() {
       <section className="bg-wood py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">
-            Pourquoi choisir Felicita ?
+            Pourquoi choisir Boutique Felicita ?
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
@@ -418,50 +439,61 @@ export default function HomePage() {
       </section>
 
       {/* Notre engagement qualité */}
-      <section className="py-16 bg-ivory">
+      <section className="py-16 bg-gradient-to-br from-green-50 via-ivory to-green-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8 text-primary">
-              Notre engagement qualité
-            </h2>
-            <p className="text-lg text-center text-charcoal mb-8 leading-relaxed">
-              Chez Charcuterie Felicita, chaque produit est sélectionné avec exigence.
-              <br />
-              Nous privilégions des méthodes artisanales, des matières premières de qualité
-              <br />
-              et des temps d'affinage respectés, pour garantir un goût authentique et constant.
-            </p>
+            <div className="text-center mb-12">
+              <div className="inline-block bg-green-600 text-white px-6 py-2 rounded-full font-bold mb-4">
+                ✓ Qualité Garantie
+              </div>
+              <h2 className="text-4xl font-bold text-primary mb-6">
+                Notre engagement qualité
+              </h2>
+              <p className="text-lg text-charcoal leading-relaxed max-w-3xl mx-auto">
+                Chez Boutique Felicita, chaque produit est sélectionné avec exigence.
+                Nous privilégions des méthodes artisanales, des matières premières de qualité
+                et des temps d'affinage respectés, pour garantir un goût authentique et constant.
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow">
-                <div className="text-2xl flex-shrink-0">✓</div>
+              <div className="flex items-start space-x-4 bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-600 hover:shadow-xl transition-all">
+                <div className="text-3xl flex-shrink-0 bg-green-100 w-12 h-12 rounded-full flex items-center justify-center">
+                  ✓
+                </div>
                 <div>
-                  <h3 className="font-bold text-primary">Sélection rigoureuse des pièces</h3>
-                  <p className="text-sm text-charcoal">Chaque produit est contrôlé et sélectionné</p>
+                  <h3 className="font-bold text-lg text-green-800 mb-2">Sélection rigoureuse des pièces</h3>
+                  <p className="text-charcoal">Chaque produit est contrôlé et sélectionné avec soin pour garantir une qualité optimale</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow">
-                <div className="text-2xl flex-shrink-0">✓</div>
+              <div className="flex items-start space-x-4 bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-600 hover:shadow-xl transition-all">
+                <div className="text-3xl flex-shrink-0 bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center">
+                  ⏳
+                </div>
                 <div>
-                  <h3 className="font-bold text-primary">Affinage lent et contrôlé</h3>
-                  <p className="text-sm text-charcoal">Temps d'affinage traditionnels respectés</p>
+                  <h3 className="font-bold text-lg text-blue-800 mb-2">Affinage lent et contrôlé</h3>
+                  <p className="text-charcoal">Temps d'affinage traditionnels respectés pour sublimer les saveurs</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow">
-                <div className="text-2xl flex-shrink-0">✓</div>
+              <div className="flex items-start space-x-4 bg-white p-6 rounded-xl shadow-lg border-l-4 border-orange-600 hover:shadow-xl transition-all">
+                <div className="text-3xl flex-shrink-0 bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center">
+                  🔥
+                </div>
                 <div>
-                  <h3 className="font-bold text-primary">Fumage traditionnel au bois</h3>
-                  <p className="text-sm text-charcoal">Méthodes ancestrales préservées</p>
+                  <h3 className="font-bold text-lg text-orange-800 mb-2">Fumage traditionnel au bois</h3>
+                  <p className="text-charcoal">Méthodes ancestrales préservées pour un goût authentique et fumé</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 bg-white p-4 rounded-lg shadow">
-                <div className="text-2xl flex-shrink-0">✓</div>
+              <div className="flex items-start space-x-4 bg-white p-6 rounded-xl shadow-lg border-l-4 border-purple-600 hover:shadow-xl transition-all">
+                <div className="text-3xl flex-shrink-0 bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center">
+                  📋
+                </div>
                 <div>
-                  <h3 className="font-bold text-primary">Conservation maîtrisée et traçabilité</h3>
-                  <p className="text-sm text-charcoal">De la fabrication à la livraison</p>
+                  <h3 className="font-bold text-lg text-purple-800 mb-2">Conservation maîtrisée et traçabilité</h3>
+                  <p className="text-charcoal">De la fabrication à la livraison, un suivi rigoureux à chaque étape</p>
                 </div>
               </div>
             </div>
@@ -470,17 +502,22 @@ export default function HomePage() {
       </section>
 
       {/* Notre Histoire - Terroir Corse */}
-      <section className="py-16 bg-gradient-to-b from-primary-light to-ivory">
+      <section className="py-16 bg-gradient-to-b from-amber-50 via-orange-50 to-ivory">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-12 text-primary">
-              L'Âme de la Corse dans Chaque Produit
-            </h2>
+            <div className="text-center mb-12">
+              <div className="inline-block bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-2 rounded-full font-bold mb-4">
+                🏔️ Terroir Authentique
+              </div>
+              <h2 className="text-4xl font-bold text-primary mb-4">
+                L'Âme de la Corse dans Chaque Produit
+              </h2>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-              <div className="bg-white p-8 rounded-2xl shadow-xl">
-                <div className="text-5xl mb-4">🏔️</div>
-                <h3 className="text-2xl font-bold text-primary mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              <div className="bg-gradient-to-br from-white to-orange-50 p-8 rounded-3xl shadow-xl border-2 border-orange-200 hover:shadow-2xl transition-all">
+                <div className="text-6xl mb-6 text-center">🏔️</div>
+                <h3 className="text-2xl font-bold text-orange-800 mb-4 text-center">
                   Un Terroir d'Exception
                 </h3>
                 <p className="text-charcoal leading-relaxed mb-4">
@@ -494,9 +531,9 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="bg-white p-8 rounded-2xl shadow-xl">
-                <div className="text-5xl mb-4">👨‍🌾</div>
-                <h3 className="text-2xl font-bold text-primary mb-4">
+              <div className="bg-gradient-to-br from-white to-green-50 p-8 rounded-3xl shadow-xl border-2 border-green-200 hover:shadow-2xl transition-all">
+                <div className="text-6xl mb-6 text-center">👨‍🌾</div>
+                <h3 className="text-2xl font-bold text-green-800 mb-4 text-center">
                   Des Producteurs Passionnés
                 </h3>
                 <p className="text-charcoal leading-relaxed mb-4">
@@ -512,16 +549,16 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-xl">
-              <div className="flex items-center justify-center mb-6">
-                <div className="text-5xl mr-4">🌰</div>
-                <div className="text-5xl mr-4">🐗</div>
-                <div className="text-5xl">🔥</div>
+            <div className="bg-gradient-to-br from-white to-amber-50 p-10 rounded-3xl shadow-2xl border-2 border-amber-200">
+              <div className="flex items-center justify-center mb-6 space-x-4">
+                <div className="text-6xl animate-bounce">🌰</div>
+                <div className="text-6xl">🐗</div>
+                <div className="text-6xl animate-pulse">🔥</div>
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-4 text-center">
+              <h3 className="text-3xl font-bold bg-gradient-to-r from-amber-800 to-orange-800 bg-clip-text text-transparent mb-6 text-center">
                 La Tradition de la Châtaigne
               </h3>
-              <p className="text-charcoal leading-relaxed text-center max-w-3xl mx-auto">
+              <p className="text-charcoal text-lg leading-relaxed text-center max-w-3xl mx-auto">
                 La châtaigne, or brun de la Corse, est au cœur de notre tradition
                 charcutière. Cette alimentation noble donne à notre charcuterie une
                 texture fondante et des notes douces de noisette. Le fumage au bois
@@ -634,7 +671,7 @@ export default function HomePage() {
               <div className="bg-ivory p-8 rounded-xl shadow-lg text-center">
                 <div className="text-5xl mb-4">⭐⭐⭐⭐⭐</div>
                 <p className="text-charcoal mb-4">
-                  Les avis publiés sur Charcuterie Felicita sont soumis à vérification
+                  Les avis publiés sur Boutique Felicita sont soumis à vérification
                   avant mise en ligne afin de garantir leur authenticité.
                 </p>
                 <p className="text-sm text-gray-600 italic">
@@ -675,15 +712,18 @@ export default function HomePage() {
           </div>
 
           <div className="max-w-3xl mx-auto border-t border-ivory/30 pt-8 mt-8">
-            <p className="text-wood text-2xl font-bold mb-6">
-              📞 Contact : 06 04 11 05 50
+            <p className="text-wood text-2xl font-bold mb-2">
+              📞 06 04 11 05 50
+            </p>
+            <p className="text-wood text-xl font-bold mb-6">
+              ✉️ contact@boutique-felicita.fr
             </p>
 
             <div className="mb-6">
               <p className="text-lg mb-4">Suivez-nous sur les réseaux sociaux</p>
               <div className="flex items-center justify-center gap-6">
                 <a
-                  href="https://instagram.com/charcuteriefelicita"
+                  href="https://instagram.com/boutiquefelicita"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ivory text-primary w-12 h-12 rounded-full flex items-center justify-center hover:bg-accent hover:text-ivory transition-all transform hover:scale-110"
@@ -694,7 +734,7 @@ export default function HomePage() {
                   </svg>
                 </a>
                 <a
-                  href="https://facebook.com/charcuteriefelicita"
+                  href="https://facebook.com/boutiquefelicita"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ivory text-primary w-12 h-12 rounded-full flex items-center justify-center hover:bg-accent hover:text-ivory transition-all transform hover:scale-110"
