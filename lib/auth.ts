@@ -34,10 +34,11 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Vérifier si l'email est vérifié
-        if (!user.emailVerified) {
-          throw new Error("Veuillez vérifier votre email avant de vous connecter. Consultez votre boîte mail.");
-        }
+        // Vérification email temporairement désactivée (Railway bloque SMTP)
+        // TODO: Réactiver après migration vers un service d'email transactionnel (Resend, SendGrid, etc.)
+        // if (!user.emailVerified) {
+        //   throw new Error("Veuillez vérifier votre email avant de vous connecter. Consultez votre boîte mail.");
+        // }
 
         return {
           id: user.id,
