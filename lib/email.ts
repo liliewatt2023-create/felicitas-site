@@ -1,15 +1,7 @@
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 
-// Configuration du transporteur Gmail SMTP
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: false, // true pour 465, false pour les autres ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+// Configuration de SendGrid avec la clé API
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
 
 interface WelcomeEmailParams {
   to: string;
@@ -38,8 +30,8 @@ export async function sendWelcomeEmail({
   const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`;
 
   try {
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || "Charcuterie Felicita <liliewatt2023@gmail.com>",
+    await sgMail.send({
+      from: process.env.SMTP_FROM || "johan.mallet1@gmail.com",
       to,
       subject: "🎉 Bienvenue chez Charcuterie Felicita - Vos identifiants",
       html: `
@@ -159,10 +151,10 @@ export async function sendWelcomeEmail({
       `,
     });
 
-    console.log(\`✅ Email de bienvenue envoyé à \${to} via Gmail SMTP\`);
+    console.log(`✅ Email de bienvenue envoyé à ${to} via SendGrid`);
     return { success: true };
   } catch (error) {
-    console.error("❌ Erreur lors de l'envoi de l'email via Gmail SMTP:", error);
+    console.error("❌ Erreur lors de l'envoi de l'email via SendGrid:", error);
     return { success: false, error };
   }
 }
@@ -175,27 +167,27 @@ export async function sendReviewModerationEmail(
   token: string
 ) {
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  const acceptUrl = \`\${baseUrl}/api/reviews/moderate?token=\${token}&action=approve\`;
-  const rejectUrl = \`\${baseUrl}/api/reviews/moderate?token=\${token}&action=reject\`;
+  const acceptUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=approve`;
+  const rejectUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=reject`;
 
   try {
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || "Charcuterie Felicita <liliewatt2023@gmail.com>",
-      to: process.env.ADMIN_REVIEWS_EMAIL || "admin@felicita.com",
-      subject: \`Nouvel avis à modérer - \${productName}\`,
-      html: \`
+    await sgMail.send({
+      from: process.env.SMTP_FROM || "johan.mallet1@gmail.com",
+      to: process.env.ADMIN_REVIEWS_EMAIL || "johan.mallet1@gmail.com",
+      subject: `Nouvel avis à modérer - ${productName}`,
+      html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Nouvel avis soumis</h2>
-          <p><strong>Produit :</strong> \${productName}</p>
-          <p><strong>Note :</strong> \${"⭐".repeat(rating)}</p>
+          <p><strong>Produit :</strong> ${productName}</p>
+          <p><strong>Note :</strong> ${"⭐".repeat(rating)}</p>
           <p><strong>Commentaire :</strong></p>
-          <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">\${comment}</p>
+          <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${comment}</p>
 
           <div style="margin-top: 30px;">
-            <a href="\${acceptUrl}" style="display: inline-block; background: #2d5a2d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-right: 10px;">
+            <a href="${acceptUrl}" style="display: inline-block; background: #2d5a2d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-right: 10px;">
               ✓ Accepter
             </a>
-            <a href="\${rejectUrl}" style="display: inline-block; background: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+            <a href="${rejectUrl}" style="display: inline-block; background: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
               ✗ Refuser
             </a>
           </div>
@@ -204,10 +196,10 @@ export async function sendReviewModerationEmail(
             Cliquez sur "Accepter" pour publier cet avis ou "Refuser" pour le supprimer.
           </p>
         </div>
-      \`,
+      `,
     });
 
-    console.log(\`✅ Email de modération envoyé via Gmail SMTP\`);
+    console.log(`✅ Email de modération envoyé via SendGrid`);
     return { success: true };
   } catch (error) {
     console.error("❌ Erreur lors de l'envoi de l'email de modération:", error);
