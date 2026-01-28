@@ -57,9 +57,7 @@ export async function sendWelcomeEmail({
   }
 
   // Utiliser NEXTAUTH_URL ou fallback sur l'URL de production
-  const baseUrl = process.env.NEXTAUTH_URL ||
-                  process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` :
-                  "https://www.boutique-felicita.fr";
+  const baseUrl = process.env.NEXTAUTH_URL || "https://www.boutique-felicita.fr";
 
   const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${verificationToken}`;
 
