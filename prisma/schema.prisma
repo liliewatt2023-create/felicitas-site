@@ -18,14 +18,13 @@ model User {
   lastName          String?        // Nom du client
   phone             String?        // Téléphone
   role              String         // PARTICULIER, RESTAURATEUR, COMITE
-  committeeCodeUsed String?        // Code comité utilisé (si role=COMITE)
+  committeeCodeUsed String?        // Code comité utilisé (si role=COMITE) - ex: FELICITA2026
   emailVerified     Boolean        @default(false)
   verificationToken String?        @unique
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   orders            Order[]
   reviews           Review[]
-  committeeCode     CommitteeCode? @relation(fields: [committeeCodeUsed], references: [code])
 
   @@index([email])
   @@index([committeeCodeUsed])
@@ -113,7 +112,6 @@ model CommitteeCode {
   notes        String?   // Notes internes
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  users        User[]
 
   @@index([code])
   @@index([isUsed])

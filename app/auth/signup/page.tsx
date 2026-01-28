@@ -45,8 +45,8 @@ function SignUpForm() {
     setLoading(true);
 
     // Validation
-    if (!email || !password || !firstName || !lastName) {
-      setError("Tous les champs sont requis");
+    if (!email || !password || !firstName || !lastName || !phone) {
+      setError("Tous les champs sont requis (y compris le téléphone)");
       setLoading(false);
       return;
     }
@@ -235,8 +235,7 @@ function SignUpForm() {
               htmlFor="phone"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Téléphone
-              <span className="text-gray-500 text-xs ml-1">(optionnel)</span>
+              Téléphone *
             </label>
             <input
               type="tel"
@@ -245,6 +244,7 @@ function SignUpForm() {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="06 12 34 56 78"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              required
             />
           </div>
 

@@ -28,8 +28,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Pour les comités, vérifier le code unique en base de données
-    let validCommitteeCode = null;
+    // Pour les comités, vérifier le code unique
     if (role === "COMITE") {
       if (!committeeCode) {
         return NextResponse.json(
@@ -38,29 +37,11 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Rechercher le code en base de données
-      validCommitteeCode = await prisma.committeeCode.findUnique({
-        where: { code: committeeCode },
-      });
-
-      if (!validCommitteeCode) {
+      // Vérifier le code comité unique
+      const validCode = process.env.COMITE_CODE || "FELICITA2026";
+      if (committeeCode !== validCode) {
         return NextResponse.json(
-          { error: "Code comité invalide" },
-          { status: 400 }
-        );
-      }
-
-      if (validCommitteeCode.isUsed) {
-        return NextResponse.json(
-          { error: "Ce code comité a déjà été utilisé" },
-          { status: 400 }
-        );
-      }
-
-      // Vérifier l'expiration si définie
-      if (validCommitteeCode.expiresAt && new Date() > validCommitteeCode.expiresAt) {
-        return NextResponse.json(
-          { error: "Ce code comité a expiré" },
+          { error: "Code comité invalide. Contactez-nous pour obtenir un code valide." },
           { status: 400 }
         );
       }
@@ -87,16 +68,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Si c'est un comité, marquer le code comme utilisé
-    if (role === "COMITE" && validCommitteeCode) {
-      await prisma.committeeCode.update({
-        where: { code: committeeCode },
-        data: {
-          isUsed: true,
-          usedBy: user.id,
-        },
-      });
-    }
+    // Pour les comités, le code est enregistré dans committeeCodeUsed
+    // (pas besoin de marquer comme utilisé car c'est un code réutilisable)
 
     // Envoyer l'email de bienvenue avec les identifiants et le lien de vérification
     try {
