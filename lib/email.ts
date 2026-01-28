@@ -32,6 +32,40 @@ export async function sendWelcomeEmail({
       ? "Comité d'Entreprise"
       : "Restaurateur";
 
+  // Personnalisation selon le rôle
+  let welcomeMessage = "";
+  let benefitsList = "";
+
+  if (role === "PARTICULIER") {
+    welcomeMessage = "Merci de vous être inscrit sur Charcuterie Felicita ! Nous sommes ravis de vous compter parmi nos clients.";
+    benefitsList = `
+      <li>🥓 <strong>Charcuterie corse authentique</strong> - Coppa, lonzo, prisuttu...</li>
+      <li>🧀 <strong>Fromages de caractère</strong> - Brocciu, tomme corse...</li>
+      <li>💰 <strong>Prix particulier : 99€/kg</strong> pour la charcuterie, 79€/kg pour les fromages</li>
+      <li>🚚 <strong>Livraison rapide</strong> partout en France</li>
+      <li>✨ <strong>Qualité artisanale garantie</strong></li>
+    `;
+  } else if (role === "COMITE") {
+    welcomeMessage = "Bienvenue dans l'espace Comité d'Entreprise ! Nous sommes ravis de vous proposer nos produits d'exception avec des <strong>tarifs préférentiels exclusifs</strong> pour vos employés.";
+    benefitsList = `
+      <li>💎 <strong>TARIFS EXCLUSIFS COMITÉS :</strong></li>
+      <li>🥓 <strong>Charcuterie : 69€/kg</strong> (au lieu de 99€/kg)</li>
+      <li>🧀 <strong>Fromages : 49€/kg</strong> (au lieu de 79€/kg)</li>
+      <li>📦 <strong>Commandes groupées</strong> facilitées pour vos événements</li>
+      <li>👥 <strong>Service dédié</strong> pour les comités d'entreprise</li>
+      <li>🎁 <strong>Idéal pour vos cadeaux</strong> et événements d'entreprise</li>
+    `;
+  } else {
+    welcomeMessage = "Bienvenue dans l'espace Restaurateur ! Nous sommes ravis de vous accompagner avec nos produits d'exception pour votre établissement.";
+    benefitsList = `
+      <li>👨‍🍳 <strong>Tarifs professionnels : 79€/kg</strong></li>
+      <li>🥓 <strong>Produits authentiques</strong> pour vos cartes</li>
+      <li>📅 <strong>Approvisionnement régulier</strong> et fiable</li>
+      <li>🚚 <strong>Livraison adaptée</strong> aux professionnels</li>
+      <li>🤝 <strong>Accompagnement personnalisé</strong></li>
+    `;
+  }
+
   // Utiliser NEXTAUTH_URL ou fallback sur l'URL de production
   const baseUrl = process.env.NEXTAUTH_URL ||
                   process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` :
@@ -135,7 +169,7 @@ export async function sendWelcomeEmail({
             <div class="content">
               <h2>Bonjour ${name},</h2>
 
-              <p>Merci de vous être inscrit sur Charcuterie Felicita ! Nous sommes ravis de vous compter parmi nos clients.</p>
+              <p>${welcomeMessage}</p>
 
               <p>Votre compte <strong>${roleText}</strong> a été créé avec succès.</p>
 
@@ -162,12 +196,9 @@ export async function sendWelcomeEmail({
                 <a href="${verificationUrl}" style="color: #8B2F2F; word-break: break-all;">${verificationUrl}</a>
               </p>
 
-              <h3>🛒 Ce qui vous attend :</h3>
-              <ul>
-                <li>🥓 Charcuterie corse authentique</li>
-                <li>🧀 Fromages de caractère</li>
-                <li>💰 Prix préférentiels selon votre profil</li>
-                <li>🚚 Livraison rapide en France</li>
+              <h3>🛒 Vos avantages ${roleText} :</h3>
+              <ul style="line-height: 1.8;">
+                ${benefitsList}
               </ul>
 
               <p>Des questions ? Contactez-nous au <strong>06 04 11 05 50</strong> ou par email à <strong>contact@boutique-felicita.fr</strong>.</p>
