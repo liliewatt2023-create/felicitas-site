@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     // Si déjà vérifié, rediriger
     if (user.emailVerified) {
       return NextResponse.redirect(
-        new URL("/auth/signin?already_verified=true", request.url)
+        new URL("/auth/signin?already_verified=true", "https://www.boutique-felicita.fr")
       );
     }
 
@@ -41,9 +41,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Rediriger vers la page de succès
+    // Rediriger vers la page de succès - URL HARDCODÉE
     return NextResponse.redirect(
-      new URL("/auth/verified", request.url)
+      new URL("/auth/verified", "https://www.boutique-felicita.fr")
     );
   } catch (error) {
     console.error("Erreur lors de la vérification de l'email:", error);
