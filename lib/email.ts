@@ -28,9 +28,7 @@ export async function sendWelcomeEmail({
   const roleText =
     role === "PARTICULIER"
       ? "Particulier"
-      : role === "COMITE"
-      ? "Comité d'Entreprise"
-      : "Restaurateur";
+      : "Comité d'Entreprise";
 
   // Personnalisation selon le rôle
   let welcomeMessage = "";
@@ -45,7 +43,8 @@ export async function sendWelcomeEmail({
       <li>🚚 <strong>Livraison rapide</strong> partout en France</li>
       <li>✨ <strong>Qualité artisanale garantie</strong></li>
     `;
-  } else if (role === "COMITE") {
+  } else {
+    // COMITE
     welcomeMessage = "Bienvenue dans l'espace Comité d'Entreprise ! Nous sommes ravis de vous proposer nos produits d'exception avec des <strong>tarifs préférentiels exclusifs</strong> pour vos employés.";
     benefitsList = `
       <li>💎 <strong>TARIFS EXCLUSIFS COMITÉS :</strong></li>
@@ -54,15 +53,6 @@ export async function sendWelcomeEmail({
       <li>📦 <strong>Commandes groupées</strong> facilitées pour vos événements</li>
       <li>👥 <strong>Service dédié</strong> pour les comités d'entreprise</li>
       <li>🎁 <strong>Idéal pour vos cadeaux</strong> et événements d'entreprise</li>
-    `;
-  } else {
-    welcomeMessage = "Bienvenue dans l'espace Restaurateur ! Nous sommes ravis de vous accompagner avec nos produits d'exception pour votre établissement.";
-    benefitsList = `
-      <li>👨‍🍳 <strong>Tarifs professionnels : 79€/kg</strong></li>
-      <li>🥓 <strong>Produits authentiques</strong> pour vos cartes</li>
-      <li>📅 <strong>Approvisionnement régulier</strong> et fiable</li>
-      <li>🚚 <strong>Livraison adaptée</strong> aux professionnels</li>
-      <li>🤝 <strong>Accompagnement personnalisé</strong></li>
     `;
   }
 
