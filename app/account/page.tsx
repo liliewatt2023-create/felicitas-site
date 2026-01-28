@@ -58,25 +58,35 @@ export default async function AccountPage() {
           </h2>
 
           <div className="space-y-4">
+            {user.firstName && user.lastName && (
+              <div className="flex justify-between items-center py-3 border-b">
+                <span className="text-gray-600">Nom complet</span>
+                <span className="font-semibold">{user.firstName} {user.lastName}</span>
+              </div>
+            )}
+
             <div className="flex justify-between items-center py-3 border-b">
               <span className="text-gray-600">Email</span>
               <span className="font-semibold">{user.email}</span>
             </div>
+
+            {user.phone && (
+              <div className="flex justify-between items-center py-3 border-b">
+                <span className="text-gray-600">Téléphone</span>
+                <span className="font-semibold">{user.phone}</span>
+              </div>
+            )}
 
             <div className="flex justify-between items-center py-3 border-b">
               <span className="text-gray-600">Type de compte</span>
               <span className="font-semibold">{getRoleName(user.role)}</span>
             </div>
 
-            {user.role === "COMITE" && (
+            {user.role === "COMITE" && user.committeeCodeUsed && (
               <div className="flex justify-between items-center py-3 border-b">
-                <span className="text-gray-600">Statut comité</span>
-                <span
-                  className={`font-semibold ${
-                    user.committeeApproved ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {user.committeeApproved ? "✓ Validé" : "✗ Non validé"}
+                <span className="text-gray-600">Code comité utilisé</span>
+                <span className="font-semibold text-green-600">
+                  {user.committeeCodeUsed}
                 </span>
               </div>
             )}

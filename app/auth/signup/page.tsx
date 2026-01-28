@@ -11,6 +11,9 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [role, setRole] = useState(roleParam || "particulier");
   const [committeeCode, setCommitteeCode] = useState("");
   const [error, setError] = useState("");
@@ -42,7 +45,7 @@ function SignUpForm() {
     setLoading(true);
 
     // Validation
-    if (!email || !password) {
+    if (!email || !password || !firstName || !lastName) {
       setError("Tous les champs sont requis");
       setLoading(false);
       return;
@@ -74,6 +77,9 @@ function SignUpForm() {
         body: JSON.stringify({
           email,
           password,
+          firstName,
+          lastName,
+          phone,
           role: role.toUpperCase(),
           committeeCode,
         }),
@@ -95,6 +101,9 @@ function SignUpForm() {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      setFirstName("");
+      setLastName("");
+      setPhone("");
       setCommitteeCode("");
     } catch (err) {
       setError("Erreur serveur");
@@ -168,12 +177,48 @@ function SignUpForm() {
             )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Prénom *
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Nom *
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                required
+              />
+            </div>
+          </div>
+
           <div>
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Email
+              Email *
             </label>
             <input
               type="email"
@@ -182,6 +227,24 @@ function SignUpForm() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               required
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Téléphone
+              <span className="text-gray-500 text-xs ml-1">(optionnel)</span>
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="06 12 34 56 78"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
 

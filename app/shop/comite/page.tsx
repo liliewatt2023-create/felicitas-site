@@ -18,7 +18,7 @@ export default async function ComiteShopPage() {
   }
 
   // Vérifier que le code comité a été validé
-  if (!session.user.committeeApproved) {
+  if (!session.user.committeeCodeUsed) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto bg-ivory rounded-xl shadow-lg p-8 text-center border-2 border-charcuterie">

@@ -88,7 +88,6 @@ export async function GET() {
         email: "system@felicita.com",
         password: hashedPassword,
         role: "PARTICULIER",
-        committeeApproved: false,
         emailVerified: true,
       },
     });

@@ -46,7 +46,7 @@ export async function sendWelcomeEmail({
         name: fromName
       },
       to,
-      subject: "🎉 Bienvenue chez Charcuterie Felicita - Vos identifiants",
+      subject: "🎉 Bienvenue chez Charcuterie Felicita - Vérifiez votre email",
       html: `
         <!DOCTYPE html>
         <html>
@@ -92,12 +92,24 @@ export async function sendWelcomeEmail({
               display: inline-block;
               background: #8B2F2F;
               color: #F4EFEA !important;
-              padding: 15px 40px;
+              padding: 18px 50px;
               text-decoration: none;
-              border-radius: 5px;
+              border-radius: 8px;
               margin: 20px 0;
               font-weight: bold;
-              font-size: 16px;
+              font-size: 18px;
+              box-shadow: 0 4px 6px rgba(139, 47, 47, 0.3);
+            }
+            .button:hover {
+              background: #6B1F1F;
+            }
+            .highlight-box {
+              background: #FFF8E7;
+              border: 2px dashed #D4A574;
+              padding: 20px;
+              border-radius: 8px;
+              margin: 20px 0;
+              text-align: center;
             }
             .footer {
               text-align: center;
@@ -114,9 +126,9 @@ export async function sendWelcomeEmail({
             </div>
 
             <div class="content">
-              <h2>Bonjour ${name || "cher client"},</h2>
+              <h2>Bonjour ${name},</h2>
 
-              <p>Merci de vous être inscrit sur notre boutique en ligne ! Nous sommes ravis de vous compter parmi nos clients.</p>
+              <p>Merci de vous être inscrit sur Charcuterie Felicita ! Nous sommes ravis de vous compter parmi nos clients.</p>
 
               <p>Votre compte <strong>${roleText}</strong> a été créé avec succès.</p>
 
@@ -126,11 +138,15 @@ export async function sendWelcomeEmail({
                 <p><strong>Mot de passe :</strong> ${password}</p>
               </div>
 
-              <p><strong>⚠️ Important :</strong> Avant de pouvoir vous connecter, vous devez vérifier votre adresse email en cliquant sur le bouton ci-dessous.</p>
-
-              <div style="text-align: center; margin: 30px 0;">
+              <div class="highlight-box">
+                <p style="font-size: 18px; font-weight: bold; color: #8B2F2F; margin: 0 0 15px 0;">
+                  ⚠️ Dernière étape : Vérifiez votre email
+                </p>
+                <p style="margin: 0 0 20px 0;">
+                  Pour activer votre compte et accéder à la boutique, cliquez sur le bouton ci-dessous :
+                </p>
                 <a href="${verificationUrl}" class="button">
-                  ✉️ Vérifier mon email
+                  ✉️ Vérifier mon email et accéder à la boutique
                 </a>
               </div>
 
@@ -139,24 +155,25 @@ export async function sendWelcomeEmail({
                 <a href="${verificationUrl}" style="color: #8B2F2F; word-break: break-all;">${verificationUrl}</a>
               </p>
 
-              <h3>🛒 Découvrez nos produits :</h3>
+              <h3>🛒 Ce qui vous attend :</h3>
               <ul>
-                <li>Charcuterie corse authentique</li>
-                <li>Fromages de caractère</li>
-                <li>Prix préférentiels selon votre profil</li>
-                <li>Livraison rapide en France</li>
+                <li>🥓 Charcuterie corse authentique</li>
+                <li>🧀 Fromages de caractère</li>
+                <li>💰 Prix préférentiels selon votre profil</li>
+                <li>🚚 Livraison rapide en France</li>
               </ul>
 
-              <p>Si vous avez des questions, n'hésitez pas à nous contacter au <strong>06 04 11 05 50</strong>.</p>
+              <p>Des questions ? Contactez-nous au <strong>06 04 11 05 50</strong> ou par email à <strong>contact@boutique-felicita.fr</strong>.</p>
 
-              <p>À bientôt sur notre boutique !</p>
+              <p>À très bientôt sur notre boutique !</p>
 
               <p><em>L'équipe Charcuterie Felicita</em></p>
             </div>
 
             <div class="footer">
               <p>Charcuterie Felicita - Produits corses authentiques</p>
-              <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+              <p>📞 06 04 11 05 50 | ✉️ contact@boutique-felicita.fr</p>
+              <p style="margin-top: 10px;">Cet email a été envoyé car vous avez créé un compte sur boutique-felicita.fr</p>
             </div>
           </div>
         </body>

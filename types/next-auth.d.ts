@@ -6,7 +6,7 @@ declare module "next-auth" {
     id: string;
     email: string;
     role: UserRoleType;
-    committeeApproved: boolean;
+    committeeCodeUsed: string | null;
   }
 
   interface Session {
@@ -14,7 +14,7 @@ declare module "next-auth" {
       id: string;
       email: string;
       role: UserRoleType;
-      committeeApproved: boolean;
+      committeeCodeUsed: string | null;
     };
   }
 }
@@ -23,6 +23,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role: UserRoleType;
-    committeeApproved: boolean;
+    committeeCodeUsed: string | null;
   }
 }

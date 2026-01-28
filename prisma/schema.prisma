@@ -11,17 +11,24 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
+  id                String         @id @default(cuid())
+  email             String         @unique
   password          String
-  role              String    // PARTICULIER, RESTAURATEUR, COMITE
-  committeeApproved Boolean   @default(false)
-  emailVerified     Boolean   @default(false)
-  verificationToken String?   @unique
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  firstName         String?        // Prénom du client
+  lastName          String?        // Nom du client
+  phone             String?        // Téléphone
+  role              String         // PARTICULIER, RESTAURATEUR, COMITE
+  committeeCodeUsed String?        // Code comité utilisé (si role=COMITE)
+  emailVerified     Boolean        @default(false)
+  verificationToken String?        @unique
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
   orders            Order[]
   reviews           Review[]
+  committeeCode     CommitteeCode? @relation(fields: [committeeCodeUsed], references: [code])
+
+  @@index([email])
+  @@index([committeeCodeUsed])
 }
 
 model Product {
@@ -92,4 +99,23 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model CommitteeCode {
+  id           String    @id @default(cuid())
+  code         String    @unique // Ex: CE-AIRFRANCE-2026
+  companyName  String    // Ex: Air France
+  contactEmail String?   // Email du comité d'entreprise
+  isUsed       Boolean   @default(false)
+  usedBy       String?   // userId qui a utilisé le code
+  createdBy    String    @default("admin") // Admin qui a créé le code
+  expiresAt    DateTime? // Date d'expiration (optionnel)
+  notes        String?   // Notes internes
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  users        User[]
+
+  @@index([code])
+  @@index([isUsed])
+  @@index([createdBy])
 }

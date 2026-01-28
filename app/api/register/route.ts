@@ -27,15 +27,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Pour les comités, vérifier le code
-    let committeeApproved = false;
     if (role === "COMITE") {
       if (committeeCode !== process.env.COMITE_CODE) {
         return NextResponse.json(
-          { error: "Code comité invalide" },
+          { error: "Code comité invalide. Utilisez /auth/signup pour créer un compte comité." },
           { status: 400 }
         );
       }
-      committeeApproved = true;
     }
 
     // Hasher le mot de passe
@@ -47,7 +45,7 @@ export async function POST(request: NextRequest) {
         email,
         password: hashedPassword,
         role,
-        committeeApproved,
+        emailVerified: true, // Auto-verify for legacy API
       },
     });
 
