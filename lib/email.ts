@@ -1,7 +1,12 @@
 import sgMail from "@sendgrid/mail";
 
 // Configuration de SendGrid avec la clé API
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
+const apiKey = process.env.SENDGRID_API_KEY || "";
+console.log("🔑 SendGrid API Key:", apiKey?.substring(0, 10) + "...");
+console.log("📧 Email FROM:", process.env.EMAIL_FROM);
+console.log("👤 Email FROM NAME:", process.env.EMAIL_FROM_NAME);
+console.log("👨‍💼 Admin EMAIL:", process.env.ADMIN_EMAIL);
+sgMail.setApiKey(apiKey);
 
 interface WelcomeEmailParams {
   to: string;
@@ -29,9 +34,17 @@ export async function sendWelcomeEmail({
 
   const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`;
 
+  const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
+  const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
+
+  console.log(`📤 Tentative d'envoi email à ${to} depuis ${fromName} <${fromEmail}>`);
+
   try {
     await sgMail.send({
-      from: process.env.SMTP_FROM || "johan.mallet1@gmail.com",
+      from: {
+        email: fromEmail,
+        name: fromName
+      },
       to,
       subject: "🎉 Bienvenue chez Charcuterie Felicita - Vos identifiants",
       html: `
@@ -153,8 +166,12 @@ export async function sendWelcomeEmail({
 
     console.log(`✅ Email de bienvenue envoyé à ${to} via SendGrid`);
     return { success: true };
-  } catch (error) {
-    console.error("❌ Erreur lors de l'envoi de l'email via SendGrid:", error);
+  } catch (error: any) {
+    console.error("❌ ERREUR SENDGRID COMPLÈTE:");
+    console.error("Code:", error.code);
+    console.error("Message:", error.message);
+    console.error("Response Body:", JSON.stringify(error.response?.body, null, 2));
+    console.error("Response Headers:", JSON.stringify(error.response?.headers, null, 2));
     return { success: false, error };
   }
 }
@@ -170,10 +187,19 @@ export async function sendReviewModerationEmail(
   const acceptUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=approve`;
   const rejectUrl = `${baseUrl}/api/reviews/moderate?token=${token}&action=reject`;
 
+  const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
+  const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
+  const adminEmail = process.env.ADMIN_EMAIL || "contact@boutique-felicita.fr";
+
+  console.log(`📤 Tentative d'envoi email modération à ${adminEmail} depuis ${fromName} <${fromEmail}>`);
+
   try {
     await sgMail.send({
-      from: process.env.SMTP_FROM || "johan.mallet1@gmail.com",
-      to: process.env.ADMIN_REVIEWS_EMAIL || "johan.mallet1@gmail.com",
+      from: {
+        email: fromEmail,
+        name: fromName
+      },
+      to: adminEmail,
       subject: `Nouvel avis à modérer - ${productName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -201,8 +227,12 @@ export async function sendReviewModerationEmail(
 
     console.log(`✅ Email de modération envoyé via SendGrid`);
     return { success: true };
-  } catch (error) {
-    console.error("❌ Erreur lors de l'envoi de l'email de modération:", error);
+  } catch (error: any) {
+    console.error("❌ ERREUR SENDGRID MODÉRATION COMPLÈTE:");
+    console.error("Code:", error.code);
+    console.error("Message:", error.message);
+    console.error("Response Body:", JSON.stringify(error.response?.body, null, 2));
+    console.error("Response Headers:", JSON.stringify(error.response?.headers, null, 2));
     return { success: false, error };
   }
 }

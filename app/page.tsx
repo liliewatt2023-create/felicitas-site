@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { Product } from "@prisma/client";
 
 function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -144,6 +145,34 @@ function FAQSection() {
 }
 
 export default function HomePage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [productsRes, reviewsRes] = await Promise.all([
+          fetch("/api/public/products"),
+          fetch("/api/public/reviews"),
+        ]);
+        const productsData = await productsRes.json();
+        const reviewsData = await reviewsRes.json();
+
+        // Ensure we always set arrays, even if API returns error
+        setProducts(Array.isArray(productsData) ? productsData : []);
+        setReviews(Array.isArray(reviewsData) ? reviewsData : []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setProducts([]);
+        setReviews([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section avec Vidéo */}
@@ -192,6 +221,93 @@ export default function HomePage() {
 
       {/* Section Vidéo Présentation */}
       <VideoSection />
+
+      {/* Nos Produits d'Exception */}
+      <section className="py-16 bg-ivory">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-primary mb-4">
+              Découvrez Nos Produits d'Exception
+            </h2>
+            <p className="text-xl text-charcoal max-w-3xl mx-auto">
+              Une sélection authentique de charcuterie corse et italienne, affinée avec soin
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                {products.map((product) => (
+                  <div
+                    key={product.id}
+                    className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent hover:border-accent"
+                  >
+                    <div className="relative h-56 bg-gradient-to-br from-primary to-primary-light overflow-hidden">
+                      {product.image ? (
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <span className="text-7xl">
+                            {product.category === "CHARCUTERIE" ? "🥓" : "🧀"}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
+                        {product.name}
+                      </h3>
+
+                      <p className="text-charcoal mb-4 line-clamp-3">
+                        {product.description}
+                      </p>
+
+                      <div className="mt-4">
+                        <span
+                          className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
+                            product.category === "CHARCUTERIE"
+                              ? "bg-charcuterie text-ivory"
+                              : "bg-accent text-ivory"
+                          }`}
+                        >
+                          {product.category === "CHARCUTERIE"
+                            ? "Charcuterie"
+                            : "Fromage"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {products.length > 0 && (
+                <div className="text-center mt-12">
+                  <p className="text-lg text-charcoal mb-4">
+                    Connectez-vous pour découvrir tous nos produits et leurs tarifs
+                  </p>
+                  <Link
+                    href="/auth/signin"
+                    className="inline-block bg-accent text-ivory px-8 py-4 rounded-lg text-lg font-bold hover:bg-charcuterie transition-colors"
+                  >
+                    Voir Tous Les Produits →
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </section>
 
       {/* Vous êtes Section */}
       <section className="py-16">
@@ -353,6 +469,70 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Notre Histoire - Terroir Corse */}
+      <section className="py-16 bg-gradient-to-b from-primary-light to-ivory">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl font-bold text-center mb-12 text-primary">
+              L'Âme de la Corse dans Chaque Produit
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+              <div className="bg-white p-8 rounded-2xl shadow-xl">
+                <div className="text-5xl mb-4">🏔️</div>
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Un Terroir d'Exception
+                </h3>
+                <p className="text-charcoal leading-relaxed mb-4">
+                  La Corse, île de beauté aux montagnes vertigineuses et aux vallées
+                  préservées, offre un terroir unique pour l'élevage traditionnel.
+                </p>
+                <p className="text-charcoal leading-relaxed">
+                  Nos cochons, nourris aux châtaignes corses, évoluent en semi-liberté
+                  dans le maquis. Cette alimentation naturelle, associée au climat
+                  méditerranéen, confère à notre charcuterie des arômes incomparables.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-xl">
+                <div className="text-5xl mb-4">👨‍🌾</div>
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Des Producteurs Passionnés
+                </h3>
+                <p className="text-charcoal leading-relaxed mb-4">
+                  Depuis des générations, nos artisans perpétuent un savoir-faire
+                  ancestral transmis de père en fils. Chaque geste, du salage au
+                  fumage, respecte les méthodes traditionnelles.
+                </p>
+                <p className="text-charcoal leading-relaxed">
+                  Dans les caves d'affinage de montagne, l'air frais et pur
+                  des Alpes et de Corse sublime naturellement nos produits pendant
+                  plusieurs mois, révélant toute leur complexité aromatique.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-xl">
+              <div className="flex items-center justify-center mb-6">
+                <div className="text-5xl mr-4">🌰</div>
+                <div className="text-5xl mr-4">🐗</div>
+                <div className="text-5xl">🔥</div>
+              </div>
+              <h3 className="text-2xl font-bold text-primary mb-4 text-center">
+                La Tradition de la Châtaigne
+              </h3>
+              <p className="text-charcoal leading-relaxed text-center max-w-3xl mx-auto">
+                La châtaigne, or brun de la Corse, est au cœur de notre tradition
+                charcutière. Cette alimentation noble donne à notre charcuterie une
+                texture fondante et des notes douces de noisette. Le fumage au bois
+                de châtaignier ajoute une dernière touche de caractère à ces produits
+                d'exception.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Fabrication & Affinage */}
       <section className="py-16 bg-ivory relative overflow-hidden">
         <div className="container mx-auto px-4">
@@ -396,20 +576,72 @@ export default function HomePage() {
       {/* Avis clients vérifiés */}
       <section className="py-16 bg-wood">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-6 text-primary">
-              Avis clients vérifiés
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-4xl font-bold text-center mb-4 text-primary">
+              Ce Que Disent Nos Clients
             </h2>
-            <div className="bg-ivory p-8 rounded-xl shadow-lg text-center">
-              <div className="text-5xl mb-4">⭐⭐⭐⭐⭐</div>
-              <p className="text-charcoal mb-4">
-                Les avis publiés sur Charcuterie Felicita sont soumis à vérification
-                avant mise en ligne afin de garantir leur authenticité.
-              </p>
-              <p className="text-sm text-gray-600 italic">
-                Vos retours sont précieux et nous aident à maintenir notre niveau d'exigence.
-              </p>
-            </div>
+            <p className="text-center text-charcoal mb-12 text-lg">
+              Tous les avis sont vérifiés avant publication
+            </p>
+
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>
+            ) : reviews.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  {reviews.slice(0, 6).map((review) => (
+                    <div
+                      key={review.id}
+                      className="bg-ivory rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-2xl">
+                          {"⭐".repeat(review.rating)}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          {new Date(review.createdAt).toLocaleDateString("fr-FR", {
+                            year: "numeric",
+                            month: "long",
+                          })}
+                        </span>
+                      </div>
+
+                      <p className="text-charcoal mb-4 leading-relaxed">
+                        {review.comment}
+                      </p>
+
+                      {review.product && (
+                        <p className="text-sm text-gray-600 italic">
+                          Produit: {review.product.name}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-ivory p-6 rounded-xl shadow-lg text-center">
+                  <p className="text-charcoal mb-2">
+                    <strong>{reviews.length}+ avis clients vérifiés</strong>
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Chaque avis est contrôlé avant publication pour garantir son authenticité
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="bg-ivory p-8 rounded-xl shadow-lg text-center">
+                <div className="text-5xl mb-4">⭐⭐⭐⭐⭐</div>
+                <p className="text-charcoal mb-4">
+                  Les avis publiés sur Charcuterie Felicita sont soumis à vérification
+                  avant mise en ligne afin de garantir leur authenticité.
+                </p>
+                <p className="text-sm text-gray-600 italic">
+                  Vos retours sont précieux et nous aident à maintenir notre niveau d'exigence.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -426,9 +658,59 @@ export default function HomePage() {
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Créez votre compte maintenant et accédez à notre boutique en ligne
           </p>
-          <p className="text-wood text-2xl font-bold">
-            Contact : 06 04 11 05 50
-          </p>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+            <Link
+              href="/auth/signup"
+              className="bg-accent text-ivory px-8 py-4 rounded-lg text-lg font-bold hover:bg-charcuterie transition-colors"
+            >
+              Créer Mon Compte
+            </Link>
+            <Link
+              href="/auth/signin"
+              className="bg-ivory text-primary px-8 py-4 rounded-lg text-lg font-bold hover:bg-wood transition-colors"
+            >
+              Se Connecter
+            </Link>
+          </div>
+
+          <div className="max-w-3xl mx-auto border-t border-ivory/30 pt-8 mt-8">
+            <p className="text-wood text-2xl font-bold mb-6">
+              📞 Contact : 06 04 11 05 50
+            </p>
+
+            <div className="mb-6">
+              <p className="text-lg mb-4">Suivez-nous sur les réseaux sociaux</p>
+              <div className="flex items-center justify-center gap-6">
+                <a
+                  href="https://instagram.com/charcuteriefelicita"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-ivory text-primary w-12 h-12 rounded-full flex items-center justify-center hover:bg-accent hover:text-ivory transition-all transform hover:scale-110"
+                  aria-label="Instagram"
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+                <a
+                  href="https://facebook.com/charcuteriefelicita"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-ivory text-primary w-12 h-12 rounded-full flex items-center justify-center hover:bg-accent hover:text-ivory transition-all transform hover:scale-110"
+                  aria-label="Facebook"
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <p className="text-sm text-ivory/80">
+              Produits artisanaux de Corse et d'Italie • Livraison en France
+            </p>
+          </div>
         </div>
       </section>
     </div>
