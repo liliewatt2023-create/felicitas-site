@@ -217,6 +217,186 @@ export async function sendWelcomeEmail({
   }
 }
 
+interface NewRegistrationParams {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  role: string;
+  registrationDate: Date;
+}
+
+export async function sendNewRegistrationNotification({
+  firstName,
+  lastName,
+  email,
+  phone,
+  role,
+  registrationDate,
+}: NewRegistrationParams) {
+  const roleText = role === "PARTICULIER" ? "Particulier" : "Comité d'Entreprise";
+
+  const fromEmail = process.env.EMAIL_FROM || "info@boutique-felicita.fr";
+  const fromName = process.env.EMAIL_FROM_NAME || "Charcuterie Felicita";
+  const adminEmail = process.env.ADMIN_EMAIL || "contact@boutique-felicita.fr";
+
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'full',
+    timeStyle: 'short',
+    timeZone: 'Europe/Paris'
+  }).format(registrationDate);
+
+  console.log(`📤 Envoi notification inscription admin pour ${firstName} ${lastName}`);
+
+  try {
+    await sgMail.send({
+      from: {
+        email: fromEmail,
+        name: fromName
+      },
+      to: adminEmail,
+      subject: `🆕 Nouvelle inscription - ${firstName} ${lastName}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              line-height: 1.6;
+              color: #333;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+            }
+            .header {
+              background: linear-gradient(135deg, #4A2E1F 0%, #5C3D2E 100%);
+              color: #F4EFEA;
+              padding: 30px;
+              text-align: center;
+              border-radius: 10px 10px 0 0;
+            }
+            .content {
+              background: #fff;
+              padding: 30px;
+              border: 2px solid #D6C4A3;
+              border-radius: 0 0 10px 10px;
+            }
+            .info-box {
+              background: #F4EFEA;
+              padding: 20px;
+              border-radius: 8px;
+              margin: 20px 0;
+              border-left: 4px solid #8B2F2F;
+            }
+            .info-row {
+              margin: 15px 0;
+              padding: 10px 0;
+              border-bottom: 1px solid #D6C4A3;
+            }
+            .info-row:last-child {
+              border-bottom: none;
+            }
+            .label {
+              font-weight: bold;
+              color: #4A2E1F;
+              margin-right: 10px;
+            }
+            .value {
+              color: #333;
+            }
+            .badge {
+              display: inline-block;
+              padding: 5px 15px;
+              border-radius: 20px;
+              font-weight: bold;
+              font-size: 14px;
+            }
+            .badge-particulier {
+              background: #8B2F2F;
+              color: #F4EFEA;
+            }
+            .badge-comite {
+              background: #2d5a2d;
+              color: #F4EFEA;
+            }
+            .footer {
+              text-align: center;
+              padding: 20px;
+              color: #666;
+              font-size: 12px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>🆕 Nouvelle Inscription</h1>
+            </div>
+
+            <div class="content">
+              <p style="font-size: 16px; margin-bottom: 20px;">
+                Un nouveau client vient de créer un compte sur la boutique Felicita.
+              </p>
+
+              <div class="info-box">
+                <div class="info-row">
+                  <span class="label">👤 Nom :</span>
+                  <span class="value">${firstName} ${lastName}</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="label">📧 Email :</span>
+                  <span class="value"><a href="mailto:${email}" style="color: #8B2F2F;">${email}</a></span>
+                </div>
+
+                <div class="info-row">
+                  <span class="label">📱 Téléphone :</span>
+                  <span class="value"><a href="tel:${phone}" style="color: #8B2F2F;">${phone}</a></span>
+                </div>
+
+                <div class="info-row">
+                  <span class="label">🏷️ Type de compte :</span>
+                  <span class="badge ${role === 'PARTICULIER' ? 'badge-particulier' : 'badge-comite'}">
+                    ${roleText}
+                  </span>
+                </div>
+
+                <div class="info-row">
+                  <span class="label">📅 Date d'inscription :</span>
+                  <span class="value">${formattedDate}</span>
+                </div>
+              </div>
+
+              <p style="margin-top: 20px; padding: 15px; background: #FFF8E7; border-left: 4px solid #D4A574; border-radius: 5px;">
+                <strong>ℹ️ Note :</strong> Le client a reçu un email de bienvenue avec un lien de vérification.
+                Son compte sera actif une fois qu'il aura cliqué sur le lien.
+              </p>
+            </div>
+
+            <div class="footer">
+              <p>Notification automatique - Charcuterie Felicita</p>
+              <p>📞 06 04 11 05 50 | ✉️ contact@boutique-felicita.fr</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    });
+
+    console.log(`✅ Notification admin envoyée pour inscription de ${firstName} ${lastName}`);
+    return { success: true };
+  } catch (error: any) {
+    console.error("❌ ERREUR NOTIFICATION ADMIN INSCRIPTION:");
+    console.error("Code:", error.code);
+    console.error("Message:", error.message);
+    console.error("Response Body:", JSON.stringify(error.response?.body, null, 2));
+    return { success: false, error };
+  }
+}
+
 export async function sendReviewModerationEmail(
   reviewId: string,
   productName: string,

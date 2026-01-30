@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { sendWelcomeEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendNewRegistrationNotification } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -90,6 +90,22 @@ export async function POST(request: NextRequest) {
         { error: "Erreur lors de l'envoi de l'email de vérification. Veuillez réessayer." },
         { status: 500 }
       );
+    }
+
+    // Envoyer une notification à l'admin (non-bloquant)
+    try {
+      await sendNewRegistrationNotification({
+        firstName,
+        lastName,
+        email,
+        phone,
+        role,
+        registrationDate: user.createdAt,
+      });
+      console.log(`📬 Notification admin envoyée pour ${firstName} ${lastName}`);
+    } catch (notificationError) {
+      // Ne pas bloquer l'inscription si la notification admin échoue
+      console.error("⚠️ Erreur notification admin (non-bloquant):", notificationError);
     }
 
     return NextResponse.json(
